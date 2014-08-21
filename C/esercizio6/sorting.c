@@ -15,7 +15,42 @@ void scambia(int*, int, int);
 
 void main(int argc, char* argv[]);
 
-void ssort(int* a, int size) {
+
+/*
+    public void sortWhile(int[] array) {
+        int x, i, j;
+        for (i = 1; i < array.length; ++i) {
+            x = array[i];
+            j = i;
+            while (j > 0 && x < array[j - 1]) {
+                array[j] = array[j - 1];
+                --j;
+            }
+            array[j] = x;
+        }
+    }
+    */
+
+
+void isort(int *a, int size)
+{
+	int x, i, j;
+	for(i = 1; i < size; ++i)
+	{
+		x = *(a+i);
+		j = i;
+		while( j < 0 && x < *(a + j - 1))
+		{
+			*(a+j) = *(a+j-1);
+			--j;		
+		}
+		*(a+j) = x;
+	}
+}
+		
+
+void ssort(int* a, int size)
+{
 
 	int i, iMin;	
 	
