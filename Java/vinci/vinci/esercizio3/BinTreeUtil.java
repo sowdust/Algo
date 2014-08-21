@@ -463,9 +463,6 @@ public class BinTreeUtil {
         if (null == t || h < 1) {
             return null;
         }
-        if (1 == h) {
-            return new BinTree(t.element);
-        }
         return new BinTree(t.element, trimmed(h - 1, t.left), trimmed(h - 1, t.right));
     }
 
@@ -474,10 +471,10 @@ public class BinTreeUtil {
      * restituisce l'albero stesso, modificato
      */
     static BinTree trim(int h, BinTree t) {
-        if (null == t || h < 2) {
+        if (null == t || h < 1) {
             return null;
         }
-        if (2 == h) {
+        if (1 == h) {
             t.left = null;
             t.right = null;
             return t;
