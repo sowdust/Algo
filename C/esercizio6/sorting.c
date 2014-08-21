@@ -15,22 +15,29 @@ void scambia(int*, int, int);
 
 void main(int argc, char* argv[]);
 
-
-/*
-    public void sortWhile(int[] array) {
-        int x, i, j;
-        for (i = 1; i < array.length; ++i) {
-            x = array[i];
-            j = i;
-            while (j > 0 && x < array[j - 1]) {
-                array[j] = array[j - 1];
-                --j;
-            }
-            array[j] = x;
+void merge(int *a, int first, int m, int last, int* aux)
+{
+	int i = first;
+	int j = m + 1;
+	int k = first;
+	
+	if(*(a+m+1) < *(a+m))
+	{
+		while (i <= m && j <= last)
+		{
+			if (a[i] <= a[j])	aux[k++] = a[i++];
+			else			aux[k++] = a[j++];
+		}
         }
-    }
-    */
-
+	
+	int h = m;
+	int l = last;
+	int r = first;
+	
+        while (h >= i)	a[l--] = a[h--];
+	
+	for (; r < k; r++)	a[r] = aux[r];
+}
 
 void isort(int *a, int size)
 {
@@ -39,7 +46,7 @@ void isort(int *a, int size)
 	{
 		x = *(a+i);
 		j = i;
-		while( j < 0 && x < *(a + j - 1))
+		while( j > 0 && x < *(a + j - 1))
 		{
 			*(a+j) = *(a+j-1);
 			--j;		
@@ -48,7 +55,6 @@ void isort(int *a, int size)
 	}
 }
 		
-
 void ssort(int* a, int size)
 {
 
@@ -96,7 +102,7 @@ void main(int argc, char* argv[])
     test[4] = 5;
     
     stampa(test, 5);
-    ssort(test,5);
+    isort(test,5);
     stampa(test, 5);
 
 }
