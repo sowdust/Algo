@@ -134,4 +134,26 @@ public class SortingAlgorithmTest {
         assertTrue(isOrdered(arrayReg));
     }
 
+    @Test
+    public void testQSort() {
+        System.out.println("Quick Sort");
+        SortingAlgorithm instance = new QuickSort();
+
+        instance.sort(arrayOrd);
+        instance.sort(arrayDOrd);
+        instance.sort(arrayOne);
+        instance.sort(arrayEmpty);
+        instance.sort(arrayReg);
+        printArray(arrayOrd);
+        assertTrue(isOrdered(arrayOrd));
+        printArray(arrayDOrd);
+        assertTrue(isOrdered(arrayDOrd));
+        printArray(arrayOne);
+        assertTrue(isOrdered(arrayOne));
+        printArray(arrayEmpty);
+        assertTrue(isOrdered(arrayEmpty));
+        printArray(arrayReg);
+        assertTrue(isOrdered(arrayReg));
+    }
+
 }

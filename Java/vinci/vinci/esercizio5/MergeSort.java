@@ -12,9 +12,21 @@ public class MergeSort implements SortingAlgorithm {
     @Override
     public void sort(int[] array) {
         int[] aux = new int[array.length];
-        msort(array, 0, array.length - 1, aux);
+        // usando la msort a passo alternato è necessario copiare gli array
+        for (int i = 0; i < aux.length; ++i) {
+            aux[i] = array[i];
+        }
+        msortAPassoAlternato(array, 0, array.length - 1, aux);
     }
 
+    /**
+     * Mergesort versione classica che fa uso di array ausiliare
+     *
+     * @param a
+     * @param first
+     * @param last
+     * @param aux
+     */
     void msort(int[] a, int first, int last, int[] aux) {
         if (first < last) {
             int m = (first + last) / 2;
@@ -22,7 +34,37 @@ public class MergeSort implements SortingAlgorithm {
             msort(a, m + 1, last, aux);
             mergeInPlace(a, first, m, last, aux);
         }
+    }
 
+    /**
+     *
+     * MergeSort a Passo alternato che evita la copiatura ad ogni chiamata
+     * dell'intero array ausiliare
+     *
+     * PRECONDIZIONE: a[first..last] = aux[first..last]
+     *
+     * POSTCONDIZIONE: a[first..last] è il risultato dell'ordinamento di
+     * a[first..last] e aux[first..last]
+     *
+     * aux[first..last] può essere modificata ma tutto ciè che sta fuori
+     * dall'intervallo [first..last] rimane invariato
+     *
+     * @param a
+     * @param first
+     * @param last
+     * @param aux
+     */
+    void msortAPassoAlternato(int[] a, int first, int last, int[] aux) {
+        // CASO BASE
+        if (first >= last) {
+            return;
+        }
+        int m = (first + last) / 2;
+        // PASSO: metto in aux l'ordinamento di a e aux
+        msortAPassoAlternato(aux, first, m, a);
+        msortAPassoAlternato(aux, m + 1, last, a);
+        // fondo le due metà di aux in a:
+        mergePassoAlternato(aux, first, m, last, a);
     }
 
     /**
@@ -110,7 +152,32 @@ public class MergeSort implements SortingAlgorithm {
         //  for (int r = first; r < k; r++) {
         //      a[r] = aux[r];
         //  }
+    }
 
+    /**
+     * Merge a passo alternato
+     *
+     * fonde i due segmenti ordinati a[first..m] e a[m+1..last] nel segmento
+     * aux[first .. last]
+     */
+    void mergePassoAlternato(int[] a, int first, int m, int last, int[] aux) {
+        int i = first, j = m + 1, k = first;
+        // PASSO come al solito
+        while (i <= m && j <= last) {
+            if (a[i] <= a[j]) {
+                aux[k++] = a[i++];
+            } else {
+                aux[k++] = a[j++];
+            }
+        }
+        //  copia della parte rimanente della metà di array non esaminata
+        while (i <= m) {
+            aux[k++] = a[i++];
+        }
+        while (j <= last) {
+            aux[k++] = a[j++];
+        }
+        // FINE: manca la copiatura finale da aux ad a
     }
 
 }
