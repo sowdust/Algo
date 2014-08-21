@@ -1,34 +1,70 @@
-#include<stdio.h>
-#include <stdlib.h>
+#ifndef _HEADER_
+#define _HEADER_
+#include "header.h"
+#endif
 
-void isort(int*, int);
+void quicksort(int *a, int size)
+{
+	qqsort(a, 0, size-1);
+}
 
-void ssort(int*, int);
+void qqsort(int* a, int inf, int sup)
+{
+	if( inf >= sup)	return;
+	
+	int randompivot = inf + random_in_range(0, sup-inf);
+	scambia(a, sup, randompivot);
+	
+	int x = *(a + sup);
+	int i = inf;
+	int j = sup - 1;
+	while (i <= j) {
+                while (i <= j && a[i] <= x)	++i;
+                while (i <= j && a[j] >= x)	--j;
+                if (i < j)			scambia(a, i, j);
+	}
+	scambia(a, i, sup);
+	qqsort(a, inf, i - 1);
+	qqsort(a, i + 1, sup);
+}
 
-void quicksort(int*, int);
+void msort(int* a, int size)
+{
+	int* aux = (int*) malloc(sizeof(int) * size);
+	mmsort(a, 0, size-1, aux);
+	free(aux);
+	
+}
 
-void msort(int*, int);
+void mmsort(int* a, int first, int last, int* aux)
+{
+	if (first < last)
+	{
+		int m = (first + last) / 2;
+		mmsort(a, first, m, aux);
+		mmsort(a, m + 1, last, aux);
+		merge(a, first, m, last, aux);
+	}
+}
 
-void stampa(int*, int);
-
-void scambia(int*, int, int);
-
-void main(int argc, char* argv[]);
-
+// versione "in place" del merge (con sempre lo stesso array ausiliario)
 void merge(int *a, int first, int m, int last, int* aux)
 {
 	int i = first;
 	int j = m + 1;
 	int k = first;
 	
-	if(*(a+m+1) < *(a+m))
+	if (*(a+m) <= *(a + m + 1))
 	{
-		while (i <= m && j <= last)
-		{
-			if (a[i] <= a[j])	aux[k++] = a[i++];
-			else			aux[k++] = a[j++];
-		}
+            return;
         }
+
+	while (i <= m && j <= last)
+	{
+		if (a[i] <= a[j])	aux[k++] = a[i++];
+		else			aux[k++] = a[j++];
+	}
+
 	
 	int h = m;
 	int l = last;
@@ -92,17 +128,20 @@ void scambia(int* a, int i, int j)
 	*(a+j) = temp;
 }
 
-void main(int argc, char* argv[])
+/* funzione trovata in rete per il calcolo di un numero */
+/* pseudo casuale all'interno dell'intervallo semi aperto */
+/* [min,max) */
+/* autore presunto: Ryan Reich */
+int random_in_range (unsigned int min, unsigned int max)
 {
-    int* test = (int*) malloc(sizeof(int) * 5);
-    test[0] = 1;
-    test[1] = 8;
-    test[2] = 3;
-    test[3] = 4;
-    test[4] = 5;
-    
-    stampa(test, 5);
-    isort(test,5);
-    stampa(test, 5);
-
+	int base_random = rand();
+	if (RAND_MAX == base_random)
+	{
+		return random_in_range(min, max);
+	}
+	int range = max - min, 	remainder = RAND_MAX % range, bucket = RAND_MAX / range;
+	if (base_random < RAND_MAX - remainder)
+	{
+		return min + base_random/bucket;
+	} else	return random_in_range (min, max);
 }
