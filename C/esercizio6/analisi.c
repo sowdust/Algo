@@ -4,8 +4,9 @@
 #endif
 
 #define FILE_NAME "risultato_analisi.csv"
-#define QUANTI_TEST 50
-#define MOLTIPLICATORE 100
+#define INIZIALE 1
+#define QUANTI_TEST 20
+#define MOLTIPLICATORE 5
 
 int* create_array(int size)
 {
@@ -13,9 +14,19 @@ int* create_array(int size)
 	int i = 0;
 	for(; i < size; ++i)
 	{
-		*(a+i) = random_in_range(INT_MIN,INT_MAX);
+		*(a+i) = rand();
 	}
 	return a;
+}
+
+void stampa_array(int* a, int size)
+{
+	int i;
+	printf("Array di dimensione %d:\n", size);
+	for(i = 0; i < size; ++i)
+	{
+		printf("%d ", a[i]);
+	}
 }
 
 copy_array(int* from, int* to, int size)
@@ -36,10 +47,11 @@ int write_row(int size, double isort, double ssort, double msort, double quickso
 
 void main(int argc, char* argv[])
 {
+	srand(time(0));
 	int* a;
 	int* b;
-	int i = 0;
-	int size = 1;
+	int i = 1;
+	int size = INIZIALE;
 	double ti, ts, tm, tq;
 	struct timeval t1, t2;
 	double elapsedTime;
@@ -53,9 +65,10 @@ void main(int argc, char* argv[])
 	for(; i < QUANTI_TEST; ++i)
 	{
 		// prepare the arrays 
-		size = size + i * MOLTIPLICATORE;
+		size = size * MOLTIPLICATORE;
 		b = create_array(size);
 		a = (int*) malloc (sizeof(int) * size);
+		//stampa_array(b, size);
 
 		// ISORT
 		copy_array(b,a,size);
@@ -66,6 +79,11 @@ void main(int argc, char* argv[])
 		ti = (t2.tv_sec - t1.tv_sec) * 1000.0;
 		// da usecondi a ms
 		ti += (t2.tv_usec - t1.tv_usec) / 1000.0;
+		if(ordinato(a,size) < 0)
+		{
+			printf("Errore! Non Ordinato!\n");
+			return;
+		}
 		printf("ISORT [%d] %f  \n", i, ti);
 
 		// SSORT
@@ -77,6 +95,11 @@ void main(int argc, char* argv[])
 		ts = (t2.tv_sec - t1.tv_sec) * 1000.0;
 		// da usecondi a ms
 		ts += (t2.tv_usec - t1.tv_usec) / 1000.0;
+		if(ordinato(a,size) < 0)
+		{
+			printf("Errore! Non Ordinato!\n");
+			return;
+		}
 		printf("SSORT [%d] %f  \n", i, ts);
 
 		// MSORT
@@ -88,6 +111,11 @@ void main(int argc, char* argv[])
 		tm = (t2.tv_sec - t1.tv_sec) * 1000.0;
 		// da usecondi a ms
 		tm += (t2.tv_usec - t1.tv_usec) / 1000.0;
+		if(ordinato(a,size) < 0)
+		{
+			printf("Errore! Non Ordinato!\n");
+			return;
+		}
 		printf("MSORT [%d] %f  \n", i, tm);
 
 		// QSORT
@@ -99,6 +127,11 @@ void main(int argc, char* argv[])
 		tq = (t2.tv_sec - t1.tv_sec) * 1000.0;
 		// da usecondi a ms
 		tq += (t2.tv_usec - t1.tv_usec) / 1000.0;
+		if(ordinato(a,size) < 0)
+		{
+			printf("Errore! Non Ordinato!\n");
+			return;
+		}
 		printf("QSORT [%d] %f  \n\n", i, tq);
 
 		free(a);

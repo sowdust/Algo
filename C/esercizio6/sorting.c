@@ -8,25 +8,45 @@ void quicksort(int *a, int size)
 	qqsort(a, 0, size-1);
 }
 
-void qqsort(int* a, int inf, int sup)
+
+
+
+void qqsort(int* a, int fst, int lst)
 {
-	if( inf >= sup)	return;
-	
-	int randompivot = inf + random_in_range(0, sup-inf);
-	scambia(a, sup, randompivot);
-	
-	int x = *(a + sup);
-	int i = inf;
-	int j = sup - 1;
-	while (i <= j) {
-                while (i <= j && a[i] <= x)	++i;
-                while (i <= j && a[j] >= x)	--j;
-                if (i < j)			scambia(a, i, j);
-	}
-	scambia(a, i, sup);
-	qqsort(a, inf, i - 1);
-	qqsort(a, i + 1, sup);
-}
+	if (fst > lst) {
+            return;
+        }
+        // INIZIALIZZAZIONE
+        int i = fst;
+	int j = lst;
+        // scelta del pivot casuale
+        int pivot = fst;
+        int x = a[pivot];
+        do {
+            // troviamo il primo elemento che deve o può stare a dx
+            while (a[i] < x) {
+                ++i;
+            }
+            // troviamo il primo elemento che deve o può stare a sx
+            while (a[j] > x) {
+                --j;
+            }
+            // a questo punto sicuramente a[i] ≥ x e a[j] ≤ x
+            // ma gli indici possono già essersi incrociati
+            if (i <= j) {
+                scambia(a, i, j);
+                i++;
+                j--;
+            }
+        } while (i <= j);
+
+        qqsort(a, fst, j);
+        qqsort(a, i, lst);
+
+    }
+
+
+
 
 void msort(int* a, int size)
 {
@@ -145,3 +165,48 @@ int random_in_range (unsigned int min, unsigned int max)
 		return min + base_random/bucket;
 	} else	return random_in_range (min, max);
 }
+
+
+
+
+
+// mmm qualcosa non va:
+void qqsortt(int* a, int inf, int sup)
+{
+	if( inf >= sup)	return;
+	
+	int randompivot = inf + random_in_range(0, sup-inf);
+	scambia(a, sup, randompivot);
+	
+	int x = *(a + sup);
+	int i = inf;
+	int j = sup - 1;
+	while (i <= j) {
+                while (i <= j && a[i] <= x)	++i;
+                while (i <= j && a[j] >= x)	--j;
+                if (i < j)			scambia(a, i, j);
+	}
+	scambia(a, i, sup);
+	qqsortt(a, inf, i - 1);
+	qqsortt(a, i + 1, sup);
+}
+
+int ordinato(int* a, int size)
+{
+	int i = 1;
+	for(; i < size; ++i)
+	{
+		if( a[i] < a[i-i] )
+		{
+			printf(" %d minore di % d", a[i], a[i-1]);
+			return -1;
+		}
+	}
+	return 0;
+}
+
+
+
+
+
+
