@@ -5,8 +5,8 @@
 
 #define FILE_NAME "risultato_analisi.csv"
 #define INIZIALE 1
-#define QUANTI_TEST 20
-#define MOLTIPLICATORE 5
+#define QUANTI_TEST 200
+#define MOLTIPLICATORE 10
 
 int* create_array(int size)
 {
@@ -14,7 +14,7 @@ int* create_array(int size)
 	int i = 0;
 	for(; i < size; ++i)
 	{
-		*(a+i) = rand();
+		*(a+i) = i; //rand();
 	}
 	return a;
 }
@@ -65,7 +65,7 @@ void main(int argc, char* argv[])
 	for(; i < QUANTI_TEST; ++i)
 	{
 		// prepare the arrays 
-		size = size * MOLTIPLICATORE;
+		size = size + i * MOLTIPLICATORE;
 		b = create_array(size);
 		a = (int*) malloc (sizeof(int) * size);
 		//stampa_array(b, size);
@@ -101,6 +101,7 @@ void main(int argc, char* argv[])
 			return;
 		}
 		printf("SSORT [%d] %f  \n", i, ts);
+
 
 		// MSORT
 		copy_array(b,a,size);
