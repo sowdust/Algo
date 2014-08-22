@@ -1,6 +1,9 @@
-da riformattare
+componenti gruppo: Mattia Vinci
+
+Esercizio 3,	6
+Esercizio 5,	4
+Esercizio 6,	6
 
 
-esercizio 3
-esercizio 5	6 punti
 
+Totale punti attesi:	16
