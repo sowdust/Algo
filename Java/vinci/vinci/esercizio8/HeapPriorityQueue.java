@@ -2,52 +2,157 @@ package vinci.esercizio8;
 
 import java.util.HashMap;
 
+/**
+ * Priority queue implemented as a heap.
+ *
+ * INVARIANT: no duplicates Ɐi . 1 ≤ i ≤ last -> heap[i-1/2].priority ≤ heap[i]
+ * priority && Ɐi last < i < heap.length -> heap[i] = null;
+ *
+ */
 public class HeapPriorityQueue implements PriorityQueue {
 
     private HashMap<String, Integer> position;
     private int last;
     private Element[] heap;
+    private static final int DEFAULT_SIZE = 10;
 
-    @Override
-    public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String first() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String pop() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public HeapPriorityQueue() {
+        last = -1;
+        position = new HashMap<>();
+        heap = new Element[DEFAULT_SIZE];
     }
 
     /**
      *
-     * @param element
-     * @param priority
-     * @return
+     * @return true if queue is empty, false otherwise
      */
     @Override
-    public boolean insert(String element, double priority) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean isEmpty() {
+        return last == -1;
     }
 
+    /**
+     *
+     * Does not modify the queue
+     *
+     * @return first element, null if queue empty
+     */
+    @Override
+    public String first() {
+        if (last < 0) {
+            return null;
+        }
+        return heap[0].getString();
+    }
+
+    /**
+     * removes and returns first element of the queue (the one having highest
+     * priority - lowest numerical value)
+     *
+     * @return first element, null if queue empty
+     */
+    @Override
+    public String pop() {
+        if (last < 0) {
+            return null;
+        }
+        String first = heap[0].getString();
+        Element ultimo = heap[last];
+        heap[last--] = null;
+        if (last >= 0) {
+            heap[0] = ultimo;
+            moveDown(0);
+        }
+        return first;
+    }
+
+    /**
+     * Adds an element to the queue respecting the implementation invariant
+     *
+     * @param element
+     * @param priority
+     * @return position of inserted element
+     */
+    @Override
+    public int insert(String element, double priority) {
+        //  if element already exists
+        Integer pos = position.get(element);
+        if (null != pos) {
+            return pos;
+        }
+        //  if heap out of memory
+        if (last == heap.length - 1) {
+            reallocate();
+        }
+        //  add the element as a leaf
+        heap[++last] = new Element(element, priority);
+        //  move element to its right place
+        moveUp(last);
+        //  add position to hash table
+        position.put(element, last);
+        return last;
+    }
+
+    /**
+     * removes an element from the queue (if the element exists)
+     *
+     * @param element value of element to be removed
+     * @return true if element removed, false if it was not in the queue
+     */
     @Override
     public boolean remove(String element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Integer i = position.get(element);
+        if (null == i) {
+            return false;
+        }
+        position.remove(element);
+        heap[i] = heap[last--];
+        if (i < last) {
+            moveDown(i);
+        }
+        return true;
     }
 
+    /**
+     * Decreases the priority of an element (if the element exists).
+     *
+     * If the new priority is not lower than the original (or equal), throws an
+     * exception
+     *
+     * @param element value of element whose priority needs to be decreased
+     * @param newPriority new priority to be assigned
+     * @return true if the priority has changed; false if the element did not
+     * exist
+     */
     @Override
     public boolean decreasePriority(String element, double newPriority) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        Integer pos = position.get(element);
+        if (null == pos) {
+            return false;
+        }
+
+        Element e = heap[pos];
+        if (e.getPrior() < newPriority) {
+            throw new IllegalArgumentException();
+        }
+
+        e.setPrior(newPriority);
+
+        if (pos > 0) {
+            moveUp(pos);
+        }
+
+        return true;
+
     }
 
     /**
      *
      * PRECONDITION: the element should not be moved down (ie it has higher
      * priority (lower numerical value) than its successors in the heap
+     *
+     * LOOP INVARIANT: i is index of the currently empty element
      *
      * Moves the element with index i up to its correct place in the heap
      *
@@ -69,17 +174,76 @@ public class HeapPriorityQueue implements PriorityQueue {
         heap[i] = e;
     }
 
+    /**
+     *
+     * PRECONDITION: there is at least one element with lower (higher numerical
+     * value) priority
+     *
+     * LOOP INVARIANT: i is index of the currently empty element
+     *
+     * @param i
+     */
     private void moveDown(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (i > last) {
+            throw new IllegalArgumentException();
+        }
+
+        Element e = heap[i];
+        int child = 2 * i + 1;
+
+        while (child <= last) {
+            //  if right child has higher (lower numerical) priority than left
+            if (((child + 1) <= last) && heap[child + 1].getPrior() <= heap[child].getPrior()) {
+                ++child;
+            }
+            //  check whether we are in the correct place; if so, exit the loop
+            if (e.getPrior() <= heap[child].getPrior()) {
+                break;
+            }
+            //  keep swapping empty place with highest priority child
+            heap[i] = heap[child];
+            i = child;
+            child = 2 * i + 1;
+        }
+        heap[i] = e;
+    }
+
+    private void reallocate() {
+        Element[] t = new Element[heap.length * 2];
+        for (int i = 0; i < heap.length; ++i) {
+            t[i] = heap[i];
+        }
+        heap = t;
+
+    }
+
+    private void stampa() {
+        System.out.println("Last: " + last);
+        for (int i = 0; i <= last; ++i) {
+            System.out.print("[" + i + "] " + heap[i].getString());
+        }
+        System.out.println();
     }
 
     private class Element {
 
-        String string;
-        double priority;
+        private String string;
+        private double priority;
 
         Element(String string, double priority) {
             this.string = string;
+            this.priority = priority;
+        }
+
+        public String getString() {
+            return string;
+        }
+
+        public double getPrior() {
+            return priority;
+        }
+
+        private void setPrior(double priority) {
             this.priority = priority;
         }
     }

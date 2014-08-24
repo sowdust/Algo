@@ -22,14 +22,14 @@ public interface PriorityQueue {
     /**
      * Does not modify the queue. First element is the one with highest priority
      *
-     * @return first element of the queue.
+     * @return first element of the queue. null if queue is empty
      */
     String first();
 
     /**
      * Removes the first element (with highest priority) of the queue
      *
-     * @return first element of the queue.
+     * @return first element of the queue. null if queue is empty
      */
     String pop();
 
@@ -38,9 +38,9 @@ public interface PriorityQueue {
      *
      * @param element the string to be added
      * @param priority priority associated to string to be added
-     * @return true if element is inserted, false if already present
+     * @return index of insterted element
      */
-    boolean insert(String element, double priority);
+    int insert(String element, double priority);
 
     /**
      * Removes an element from the queue (if the element exists)
