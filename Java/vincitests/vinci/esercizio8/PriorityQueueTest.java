@@ -86,6 +86,21 @@ public class PriorityQueueTest {
     @Test
     public void testInsert() {
         System.out.println("insert testato insieme a metodi di sopra");
+        PriorityQueue instance = new HeapPriorityQueue();
+        instance.insert("primo", 0);
+        instance.insert("prim", 0.1);
+        instance.insert("pri", 0.2);
+        instance.insert("rimo", 0.3);
+        instance.insert("pimo", 0.4);
+        instance.insert("prmo", 0.5);
+        instance.insert("praimo", 0.6);
+        instance.insert("priaamo", 0.7);
+        instance.insert("primsso", 0.8);
+        instance.insert("primooo", 0.9);
+        instance.insert("primaso", 1);
+        assertEquals(instance.pop(), "primo");
+        assertEquals(instance.pop(), "prim");
+
     }
 
     @Test
@@ -125,11 +140,26 @@ public class PriorityQueueTest {
         String element = "";
         double newPriority = 0.0;
         PriorityQueue instance = new HeapPriorityQueue();
+        instance.insert("primo", 0.20);
+        instance.insert("secondo", 1);
+        instance.insert("terzo", 2);
+        instance.insert("quart", 3);
+        boolean result = instance.decreasePriority("non", 0);
         boolean expResult = false;
-        boolean result = instance.decreasePriority(element, newPriority);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        result = instance.decreasePriority("terzo", 0.18);
+        assertTrue(result);
+        assertEquals(instance.first(), "terzo");
+        result = instance.decreasePriority("quart", 0.15);
+        assertTrue(result);
+        assertEquals(instance.first(), "quart");
+        result = instance.decreasePriority("primo", 0.1);
+        assertTrue(result);
+        assertEquals(instance.first(), "primo");
+        result = instance.decreasePriority("terzo", 0.03);
+        assertTrue(result);
+        assertEquals(instance.first(), "terzo");
+
     }
 
 }

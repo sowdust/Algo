@@ -11,7 +11,7 @@ import java.util.HashMap;
  */
 public class HeapPriorityQueue implements PriorityQueue {
 
-    private HashMap<String, Integer> position;
+    private final HashMap<String, Integer> position;
     private int last;
     private Element[] heap;
     private static final int DEFAULT_SIZE = 10;
@@ -57,6 +57,8 @@ public class HeapPriorityQueue implements PriorityQueue {
             return null;
         }
         String first = heap[0].getString();
+        //  remove index from hashmap
+        position.remove(first);
         Element ultimo = heap[last];
         heap[last--] = null;
         if (last >= 0) {
@@ -82,14 +84,13 @@ public class HeapPriorityQueue implements PriorityQueue {
         }
         //  if heap out of memory
         if (last == heap.length - 1) {
-            reallocate();
+            reallocate(true);
         }
         //  add the element as a leaf
         heap[++last] = new Element(element, priority);
         //  move element to its right place
         moveUp(last);
-        //  add position to hash table
-        position.put(element, last);
+
         return last;
     }
 
@@ -109,6 +110,9 @@ public class HeapPriorityQueue implements PriorityQueue {
         heap[i] = heap[last--];
         if (i < last) {
             moveDown(i);
+        }
+        if (last < (heap.length - 1) / 4) {
+            reallocate(false);
         }
         return true;
     }
@@ -169,9 +173,13 @@ public class HeapPriorityQueue implements PriorityQueue {
         while (i > 0 && e.priority < heap[(i - 1) / 2].priority) {
             // swap the empty place (index i) with its father element
             heap[i] = heap[(i - 1) / 2];
+            //  update index table
+            position.put(heap[i].getString(), i);
             i = (i - 1) / 2;
         }
         heap[i] = e;
+        //  update index table
+        position.put(heap[i].getString(), i);
     }
 
     /**
@@ -202,19 +210,38 @@ public class HeapPriorityQueue implements PriorityQueue {
             }
             //  keep swapping empty place with highest priority child
             heap[i] = heap[child];
+            //  update index table
+            position.put(heap[i].getString(), i);
             i = child;
             child = 2 * i + 1;
         }
         heap[i] = e;
+        //  update index table
+        position.put(heap[i].getString(), i);
     }
 
-    private void reallocate() {
-        Element[] t = new Element[heap.length * 2];
-        for (int i = 0; i < heap.length; ++i) {
+    /**
+     * changes the heap size: reduces it by half when last element is lass than
+     * 1/4 of size; doubles it when array is full
+     *
+     * Respects the invariant for which all a[i] with i > last are null
+     *
+     * @param more
+     */
+    private void reallocate(boolean more) {
+        Element[] t;
+        if (more) {
+            t = new Element[heap.length * 2];
+        } else {
+            t = new Element[heap.length / 2];
+        }
+        for (int i = 0; i <= last; ++i) {
             t[i] = heap[i];
         }
+        for (int i = last + 1; i < t.length; ++i) {
+            t[i] = null;
+        }
         heap = t;
-
     }
 
     private void stampa() {
@@ -223,6 +250,7 @@ public class HeapPriorityQueue implements PriorityQueue {
             System.out.print("[" + i + "] " + heap[i].getString());
         }
         System.out.println();
+
     }
 
     private class Element {
