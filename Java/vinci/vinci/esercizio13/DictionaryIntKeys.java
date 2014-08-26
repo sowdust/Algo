@@ -39,13 +39,13 @@ public interface DictionaryIntKeys {
 
     /**
      *
-     * @return element with lowest key
+     * @return element with lowest key; null if empty
      */
     ObjectWithIntKey min();
 
     /**
      *
-     * @return element with highest key
+     * @return element with highest key, null if empty
      */
     ObjectWithIntKey max();
 

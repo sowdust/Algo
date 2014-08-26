@@ -5,6 +5,7 @@ Esercizio 5,	4
 Esercizio 6,	6
 Esercizio 8,    4
 Esercizio 9,    2
+Esercizio 13B,	3	(per ora solo search tree)
 
 
-Totale punti attesi:	22
+Totale punti attesi:	25
