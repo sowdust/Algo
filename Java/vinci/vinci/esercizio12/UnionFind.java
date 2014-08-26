@@ -15,7 +15,7 @@ public class UnionFind {
     /**
      * forest
      */
-    int[] a;
+    private int[] a;
 
     /**
      * Creates the data structure. INIT: all members are set to -1 (all
@@ -23,7 +23,7 @@ public class UnionFind {
      *
      * @param n capacity of newly created Union Find
      */
-    UnionFind(int n) {
+    public UnionFind(int n) {
         a = new int[n];
         for (int i = 0; i < n; ++i) {
             a[i] = -1;
@@ -33,7 +33,7 @@ public class UnionFind {
     /**
      * @return capacity of Union Find
      */
-    int getCapacity() {
+    public int getCapacity() {
         return a.length;
     }
 
@@ -44,7 +44,7 @@ public class UnionFind {
      * @param n new capacity
      * @throws IllegalArgumentException
      */
-    void setCapacity(int n) throws IllegalArgumentException {
+    public void setCapacity(int n) throws IllegalArgumentException {
         if (n < a.length) {
             throw new IllegalArgumentException();
         }
@@ -71,13 +71,16 @@ public class UnionFind {
      * @throws IllegalArgumentException
      */
     @SuppressWarnings("empty-statement")
-    int find(int e) throws IllegalArgumentException {
-        if (e < 0 || e > a.length) {
+    public int find(int e) throws IllegalArgumentException {
+        if (e < 0 || e >= a.length) {
             throw new IllegalArgumentException();
         }
-        int parent = a[e];
-        while ((parent = a[parent]) >= 0) ;
-        return parent;
+        int sizeORparent = a[e];
+        while (sizeORparent >= 0) {
+            e = sizeORparent;
+            sizeORparent = a[e];
+        }
+        return e;
     }
 
     /**
@@ -87,8 +90,18 @@ public class UnionFind {
      * @param b
      * @return true if a and b belonging to different sets. false otherwise.
      */
-    boolean union(int a, int b) {
-        return false;
+    public boolean union(int a, int b) {
+        int ea = find(a);
+        int eb = find(b);
+        // if they belong to same set
+        if (ea == eb) {
+            return false;
+        }
+        // update size of union
+        this.a[ea] += this.a[eb];
+        // update ref to root of "united" member
+        this.a[eb] = ea;
+        return true;
     }
 
 }
