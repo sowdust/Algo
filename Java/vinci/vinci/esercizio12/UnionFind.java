@@ -1,5 +1,8 @@
 package vinci.esercizio12;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Abstract Data Type Union Find implemented as an array. The array represents
  * the forest of trees. Given n, elements are the members of the set [0, n-1].
@@ -64,7 +67,10 @@ public class UnionFind {
 
     /**
      * Returns the "guard" of the set to which element e belongs. If e is not a
-     * valid element (ie: in [0..capacity]) throws an exception.
+     * valid element (ie: in [0..capacity]) throws an exception. Comprehension
+     * is done using an auxiliary List that is filled when navigating through
+     * the tree towards the root. Its presence simply doubles the number of
+     * steps (same as proceeding backwards from root to leaves).
      *
      * @param e Element for which
      * @return guard for element e
@@ -75,10 +81,24 @@ public class UnionFind {
         if (e < 0 || e >= a.length) {
             throw new IllegalArgumentException();
         }
+        // list in which we put all elements to be "compressed"
+        List<Integer> daComprimere = new LinkedList();
+        //  either size of the tree of which element is root (if value negative)
+        //  or parent of this node if element is not root (if value is >= 0)
         int sizeORparent = a[e];
+        //  for all elements that are not roots (ie guards of their set)
         while (sizeORparent >= 0) {
+            //  add them to the list of elements to be "compressed"
+            daComprimere.add(e);
+            //  navigate up the tree
             e = sizeORparent;
             sizeORparent = a[e];
+        }
+        //  COMPREHENSION: update the nodes moving them as children of the root
+        //  member of their set
+        for (Integer toCompress : daComprimere) {
+            System.out.println("adding " + e + "as father");
+            a[toCompress] = e;
         }
         return e;
     }
