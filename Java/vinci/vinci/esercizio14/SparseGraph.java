@@ -5,6 +5,20 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * SparseGraph implements the general Graph interface for, guess, Sparse Graphs.
+ * It uses appropriate data types (adjacency - better incidency - lists instead
+ * of adjacency matrix).
+ *
+ * To play with Java reflection I have implemented Weighted edges as a subclass
+ * of regular Edges (which do not have a weight value at all)
+ *
+ * Design-wise it would have probably been better to create a single class with
+ * a default weight value of 1 and an overloaded constructor
+ *
+ * @param <V> type of vertices
+ * @param <E> type of edges
+ */
 public class SparseGraph<V, E> implements Graph {
 
     private final List<Node> nodes;
@@ -28,17 +42,17 @@ public class SparseGraph<V, E> implements Graph {
         if (null != pos) {
             return false;
         }
-        //  create node and add it to graph
+        //  create vertex and add it to graph
         nodes.add(new Node((V) vertex));
-        //  add node index into position dictionary
+        //  add vertex index into position dictionary
         position.put((V) vertex, nodes.size() - 1);
 
         return true;
     }
 
     /**
-     * adds edge (v1, v2) to the graph, assigning default weight 1 and
-     * information info, only if the edge does not exist.
+     * adds edge (v1, v2) to the graph, assigning information info, only if the
+     * edge does not exist.
      *
      * @param v1 First vertex belonging to the edge
      * @param v2 Second vertex belonging to the edge
@@ -56,7 +70,7 @@ public class SparseGraph<V, E> implements Graph {
         }
         Node n1 = nodes.get(pv1);
         Node n2 = nodes.get(pv2);
-        // check if node is already adjacent
+        // check if vertex is already adjacent
         for (Object adj : n1.incident) {
             if (((Edge) adj).isSecond(n2)) {
                 return false;
@@ -69,19 +83,124 @@ public class SparseGraph<V, E> implements Graph {
         return true;
     }
 
+    /**
+     * adds edge (v1, v2) to the graph, assigning weight and information info,
+     * only if the edge dows not exist.
+     *
+     * @param v1 First vertex belonging to the edge
+     * @param v2 Second vertex belonging to the edge
+     * @param weight Cost of the edge
+     * @param info edge extra info. It can be null.
+     * @return true if vertex was added, false otherwise
+     * @throws IllegalArgumentException if a vertex doest not belong to the
+     * graph
+     */
     @Override
     public boolean addEdge(Object v1, Object v2, double weight, Object info) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Integer pv1 = position.get((V) v1);
+        Integer pv2 = position.get((V) v2);
+        if (pv1 == null || pv2 == null) {
+            throw new IllegalArgumentException();
+        }
+        Node n1 = nodes.get(pv1);
+        Node n2 = nodes.get(pv2);
+        // check if vertex is already adjacent
+        for (Object adj : n1.incident) {
+            if (((Edge) adj).isSecond(n2)) {
+                return false;
+            }
+        }
+        //  create the new edge and add it to n1 incident list
+        Edge e = new WEdge(n1, n2, (E) info, weight);
+        n1.incident.add(e);
+
+        return true;
     }
 
+    /**
+     * adds undirected edge (v1, v2), (v2,v1) to the graph assigning information
+     * info, only if the edge dows not exist.
+     *
+     * IMPLEMENTATION: It does NOT add the undirected edge if a directed edge
+     * already existed
+     *
+     * @param v1 First vertex belonging to the edge
+     * @param v2 Second vertex belonging to the edge
+     * @param info edge extra info. It can be null.
+     * @return true if vertex was added, false otherwise
+     * @throws IllegalArgumentException if a vertex doest not belong to the
+     * graph
+     */
     @Override
     public boolean addUndirectedEdge(Object v1, Object v2, Object info) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Integer pv1 = position.get((V) v1);
+        Integer pv2 = position.get((V) v2);
+        if (pv1 == null || pv2 == null) {
+            throw new IllegalArgumentException();
+        }
+        Node n1 = nodes.get(pv1);
+        Node n2 = nodes.get(pv2);
+        // check if vertex is already adjacent
+        for (Object adj : n1.incident) {
+            if (((Edge) adj).isNode(n2)) {
+                return false;
+            }
+        }
+        for (Object adj : n2.incident) {
+            if (((Edge) adj).isNode(n1)) {
+                return false;
+            }
+        }
+        //  create the new edge and add it to both incident lists
+        Edge e1 = new Edge(n1, n2, (E) info);
+        Edge e2 = new Edge(n2, n1, (E) info);
+        n1.incident.add(e1);
+        n2.incident.add(e2);
+
+        return true;
     }
 
+    /**
+     * adds undirected edge (v1, v2), (v2,v1) to the graph assigning weight and
+     * information info, only if the edge dows not exist.
+     *
+     * IMPLEMENTATION: It does NOT add the undirected edge if a directed edge
+     * already existed
+     *
+     * @param v1 First vertex belonging to the edge
+     * @param v2 Second vertex belonging to the edge
+     * @param info edge extra info. It can be null.
+     * @return true if vertex was added, false otherwise
+     * @throws IllegalArgumentException if a vertex doest not belong to the
+     * graph
+     */
     @Override
-    public boolean addEdgeUndirected(Object v1, Object v2, double weight, Object info) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean addUndirectedEdge(Object v1, Object v2, double weight, Object info) throws IllegalArgumentException {
+        Integer pv1 = position.get((V) v1);
+        Integer pv2 = position.get((V) v2);
+        if (pv1 == null || pv2 == null) {
+            throw new IllegalArgumentException();
+        }
+        Node n1 = nodes.get(pv1);
+        Node n2 = nodes.get(pv2);
+        // check if vertex is already adjacent
+        for (Object adj : n1.incident) {
+            if (((Edge) adj).isNode(n2)) {
+                return false;
+            }
+        }
+        for (Object adj : n2.incident) {
+            if (((Edge) adj).isNode(n1)) {
+                return false;
+            }
+        }
+        //  create the new edge and add it to both incident lists
+        Edge e1 = new WEdge(n1, n2, (E) info, weight);
+        Edge e2 = new WEdge(n2, n1, (E) info, weight);
+        n1.incident.add(e1);
+        n2.incident.add(e2);
+
+        return true;
     }
 
     /**
@@ -120,19 +239,71 @@ public class SparseGraph<V, E> implements Graph {
         return false;
     }
 
+    /**
+     * Returns weight of a single edge, if the edge is a WEdge, 1 otherwise
+     *
+     * @param v1 origin vertex
+     * @param v2 destination vertes
+     * @return edge's weight
+     * @throws IllegalArgumentException if vertices or edge not in graph
+     */
     @Override
-    public double getWeight(Object from, Object to) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public double getWeight(Object v1, Object v2) throws IllegalArgumentException {
+        Integer pos1 = position.get((V) v1);
+        Integer pos2 = position.get((V) v2);
+        if (null == pos1 || null == pos2) {
+            throw new IllegalArgumentException("Vertex not in graph");
+        }
+        Node n1 = nodes.get(pos1);
+        Node n2 = nodes.get(pos2);
+        Edge e = null;
+        for (Object adj : n1.incident) {
+            if (((Edge) adj).isSecond(n2)) {
+                e = (Edge) adj;
+            }
+        }
+        if (null == e) {
+            throw new IllegalArgumentException("Edge not in graph");
+        }
+        //  use reflection to check whether this is a weighted edge
+        if (e instanceof WEdge) {
+            return ((WEdge) e).getWeight();
+        }
+
+        return 1;
+
     }
 
+    /**
+     * @return list of all vertices in the graph
+     */
     @Override
-    public ArrayList vertices() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<V> vertices() {
+        ArrayList<V> vertices = new ArrayList(nodes.size());
+        for (Node n : nodes) {
+            vertices.add((V) n.vertex);
+        }
+        return vertices;
     }
 
+    /**
+     * @param vertex
+     * @return adjacency list of vertex; null if vertex does not belong to the
+     * graph
+     */
     @Override
-    public ArrayList neighbours(Object vertex) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ArrayList<V> neighbours(Object vertex) {
+        Integer pos = position.get((V) vertex);
+        if (pos == null) {
+            return null;
+        }
+        Node n = nodes.get(pos);
+        ArrayList<V> neighbours = new ArrayList<>();
+        for (Object edge : n.incident) {
+            neighbours.add((V) ((Edge) edge).getSecond().vertex);
+        }
+
+        return neighbours;
     }
 
     private class Edge<E> {
@@ -147,10 +318,6 @@ public class SparseGraph<V, E> implements Graph {
             this.info = info;
         }
 
-        boolean isFirst(Node n) {
-            return n == node1;
-        }
-
         boolean isSecond(Node n) {
             return n == node2;
         }
@@ -158,6 +325,16 @@ public class SparseGraph<V, E> implements Graph {
         boolean isNode(Node n) {
             return n == node1 || n == node2;
         }
+
+        Node getSecond() {
+            return node2;
+        }
+
+        @Override
+        public String toString() {
+            return "[ " + node1 + " -> " + node2 + " ]" + info + " ";
+        }
+
     }
 
     private class WEdge<E> extends Edge<E> {
@@ -168,16 +345,31 @@ public class SparseGraph<V, E> implements Graph {
             super(node1, node2, info);
             this.weight = weight;
         }
+
+        double getWeight() {
+            return weight;
+        }
+
+        @Override
+        public String toString() {
+            return super.toString() + " { " + weight + " } ";
+        }
+
     }
 
     private class Node<V> {
 
-        V node;
+        V vertex;
         List<Edge> incident;
 
         Node(V node) {
-            this.node = node;
+            this.vertex = node;
             this.incident = new LinkedList<>();
+        }
+
+        @Override
+        public String toString() {
+            return vertex.toString();
         }
     }
 

@@ -19,8 +19,8 @@ public interface Graph<V, E> {
     boolean addVertex(V vertex);
 
     /**
-     * adds edge (v1, v2) to the graph, assigning default weight 1 and
-     * information info, only if the edge dows not exist.
+     * adds edge (v1, v2) to the graph and information info, only if the edge
+     * dows not exist.
      *
      * @param v1 First vertex belonging to the edge
      * @param v2 Second vertex belonging to the edge
@@ -32,8 +32,8 @@ public interface Graph<V, E> {
     boolean addEdge(V v1, V v2, E info) throws IllegalArgumentException;
 
     /**
-     * adds edge (v1, v2) to the graph, assigning information info, only if the
-     * edge dows not exist.
+     * adds edge (v1, v2) to the graph, assigning weight and information info,
+     * only if the edge dows not exist.
      *
      * @param v1 First vertex belonging to the edge
      * @param v2 Second vertex belonging to the edge
@@ -70,7 +70,7 @@ public interface Graph<V, E> {
      * @throws IllegalArgumentException if a vertex doest not belong to the
      * graph
      */
-    boolean addEdgeUndirected(V v1, V v2, double weight, E info) throws IllegalArgumentException;
+    boolean addUndirectedEdge(V v1, V v2, double weight, E info) throws IllegalArgumentException;
 
     /**
      * Check for vertex existance
@@ -92,12 +92,14 @@ public interface Graph<V, E> {
     boolean hasEdge(V v1, V v2) throws IllegalArgumentException;
 
     /**
+     * Returns weight of a single edge, if the edge is weighted; 1 otherwise
      *
      * @param from origin vertex
      * @param to destination vertes
      * @return edge's weight
+     * @throws IllegalArgumentException if vertices or edge not in graph
      */
-    double getWeight(V from, V to);
+    double getWeight(V from, V to) throws IllegalArgumentException;
 
     /**
      * @return list of all vertices in the graph
