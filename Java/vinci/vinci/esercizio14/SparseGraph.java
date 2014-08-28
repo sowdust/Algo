@@ -5,55 +5,24 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * **
- * UNO SCHIFO! CREARE CLASSI INTERNE PER RAPPRESENTARE NODI<V> E ARCHI<E>
- *
- * @author mat
- * @param <V>
- * @param <E>
- */
-public class SparseGraph<V, E> implements Graph {
+public class SparseGraph implements Graph {
 
-    private final List<List<Integer>> nodes;
-    //private final List<V> adjacent;
-    private final HashMap<V, Integer> position;
+    private final List<Node> nodes;
+    private final HashMap<Node, Integer> position;
 
     SparseGraph() {
-        nodes = new ArrayList<>();
-        position = new HashMap<>();
+        this.nodes = new ArrayList<>();
+        this.position = new HashMap<>();
     }
 
     @Override
     public boolean addVertex(Object vertex) {
-        Integer pos = position.get((V) vertex);
-        if (null != pos) {
-            return false;
-        }
-        //  add node list to vertices list
-        List<Integer> l = new LinkedList<>();
-        nodes.add(l);
-        //  add its position to hashtable
-        position.put((V) vertex, nodes.size() - 1);
-        return true;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean addEdge(Object v1, Object v2, Object info) throws IllegalArgumentException {
-        Integer pv1 = position.get((V) v1);
-        Integer pv2 = position.get((V) v2);
-        if (pv1 == null || pv2 == null) {
-            throw new IllegalArgumentException();
-        }
-        List<Integer> adjacent = nodes.get(pv1);
-        for (Integer v : adjacent) {
-            //  if vertex (position) already in adjacency list
-            if (v.equals(pv2)) {
-                return false;
-            }
-        }
-        adjacent.add(pv2);
-        return true;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -94,6 +63,40 @@ public class SparseGraph<V, E> implements Graph {
     @Override
     public ArrayList neighbours(Object vertex) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private class Edge<E> {
+
+        E info;
+        Node node1;
+        Node node2;
+
+        Edge(Node node1, Node node2, E info) {
+            this.node1 = node1;
+            this.node2 = node2;
+            this.info = info;
+        }
+    }
+
+    private class WEdge<E> extends Edge<E> {
+
+        double weight;
+
+        public WEdge(Node node1, Node node2, E info, double weight) {
+            super(node1, node2, info);
+            this.weight = weight;
+        }
+    }
+
+    private class Node<V> {
+
+        V node;
+        List<Edge> incident;
+
+        Node(V node) {
+            this.node = node;
+            this.incident = new LinkedList<>();
+        }
     }
 
 }
