@@ -1,9 +1,11 @@
 package vinci.esercizio14;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * SparseGraph implements the general Graph interface for, guess, Sparse Graphs.
@@ -19,7 +21,7 @@ import java.util.List;
  * @param <V> type of vertices
  * @param <E> type of edges
  */
-public class SparseGraph<V, E> implements Graph {
+public class SparseGraph<V, E> implements Graph<V, E> {
 
     private final List<Node> nodes;
     private final HashMap<V, Integer> position;
@@ -36,7 +38,7 @@ public class SparseGraph<V, E> implements Graph {
      * @return true if vertex was added
      */
     @Override
-    public boolean addVertex(Object vertex) {
+    public boolean addVertex(V vertex) {
         Integer pos = position.get((V) vertex);
         //  if vertex already exists
         if (null != pos) {
@@ -62,7 +64,7 @@ public class SparseGraph<V, E> implements Graph {
      * graph
      */
     @Override
-    public boolean addEdge(Object v1, Object v2, Object info) throws IllegalArgumentException {
+    public boolean addEdge(V v1, V v2, E info) throws IllegalArgumentException {
         Integer pv1 = position.get((V) v1);
         Integer pv2 = position.get((V) v2);
         if (pv1 == null || pv2 == null) {
@@ -96,7 +98,7 @@ public class SparseGraph<V, E> implements Graph {
      * graph
      */
     @Override
-    public boolean addEdge(Object v1, Object v2, double weight, Object info) throws IllegalArgumentException {
+    public boolean addEdge(V v1, V v2, double weight, E info) throws IllegalArgumentException {
         Integer pv1 = position.get((V) v1);
         Integer pv2 = position.get((V) v2);
         if (pv1 == null || pv2 == null) {
@@ -132,7 +134,7 @@ public class SparseGraph<V, E> implements Graph {
      * graph
      */
     @Override
-    public boolean addUndirectedEdge(Object v1, Object v2, Object info) throws IllegalArgumentException {
+    public boolean addUndirectedEdge(V v1, V v2, E info) throws IllegalArgumentException {
         Integer pv1 = position.get((V) v1);
         Integer pv2 = position.get((V) v2);
         if (pv1 == null || pv2 == null) {
@@ -175,7 +177,7 @@ public class SparseGraph<V, E> implements Graph {
      * graph
      */
     @Override
-    public boolean addUndirectedEdge(Object v1, Object v2, double weight, Object info) throws IllegalArgumentException {
+    public boolean addUndirectedEdge(V v1, V v2, double weight, E info) throws IllegalArgumentException {
         Integer pv1 = position.get((V) v1);
         Integer pv2 = position.get((V) v2);
         if (pv1 == null || pv2 == null) {
@@ -210,7 +212,7 @@ public class SparseGraph<V, E> implements Graph {
      * @return true if vertex exists, false otherwise
      */
     @Override
-    public boolean hasVertex(Object vertex) {
+    public boolean hasVertex(V vertex) {
         return position.get((V) vertex) != null;
     }
 
@@ -223,7 +225,7 @@ public class SparseGraph<V, E> implements Graph {
      * @throws IllegalArgumentException if vertices not in graph
      */
     @Override
-    public boolean hasEdge(Object v1, Object v2) throws IllegalArgumentException {
+    public boolean hasEdge(V v1, V v2) throws IllegalArgumentException {
         Integer pos1 = position.get((V) v1);
         Integer pos2 = position.get((V) v2);
         if (pos1 == null || pos2 == null) {
@@ -248,7 +250,7 @@ public class SparseGraph<V, E> implements Graph {
      * @throws IllegalArgumentException if vertices or edge not in graph
      */
     @Override
-    public double getWeight(Object v1, Object v2) throws IllegalArgumentException {
+    public double getWeight(V v1, V v2) throws IllegalArgumentException {
         Integer pos1 = position.get((V) v1);
         Integer pos2 = position.get((V) v2);
         if (null == pos1 || null == pos2) {
@@ -292,7 +294,7 @@ public class SparseGraph<V, E> implements Graph {
      * graph
      */
     @Override
-    public ArrayList<V> neighbours(Object vertex) {
+    public ArrayList<V> neighbours(V vertex) {
         Integer pos = position.get((V) vertex);
         if (pos == null) {
             return null;
@@ -371,6 +373,40 @@ public class SparseGraph<V, E> implements Graph {
         public String toString() {
             return vertex.toString();
         }
+    }
+
+    public Graph<String, String> loadFromFile(String fileName) throws Exception {
+        Graph<String, String> graph = new SparseGraph();
+        try {
+            Scanner input = new Scanner(new File(fileName));
+            while (input.hasNextLine()) {
+                String line = input.nextLine();
+                Scanner lineScan = new Scanner(line);
+                if (lineScan.hasNext()) {
+                    String nome1 = lineScan.next();
+                    graph.addVertex(nome1);
+                    if (lineScan.hasNext()) {
+                        String nome2 = lineScan.next();
+                        graph.addVertex(nome2);
+                        if (lineScan.hasNextInt()) {
+                            double peso = lineScan.nextInt();
+//System.out.println(temp1.name+" "+temp2.name);
+                            graph.addEdge(nome1, nome2, peso, nome1 + " " + nome2);
+                        } else {
+                            throw new Exception("Bad string format");
+                        }
+                    } else {
+                        throw new Exception("Bad string format");
+                    }
+                } else {
+                    throw new Exception("Bad string format");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return graph;
     }
 
 }
