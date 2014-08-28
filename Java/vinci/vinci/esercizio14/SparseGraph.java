@@ -5,19 +5,35 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SparseGraph implements Graph {
+public class SparseGraph<V, E> implements Graph {
 
     private final List<Node> nodes;
-    private final HashMap<Node, Integer> position;
+    private final HashMap<V, Integer> position;
 
     SparseGraph() {
         this.nodes = new ArrayList<>();
         this.position = new HashMap<>();
     }
 
+    /**
+     * adds vertex to a nodes list if it does not exist already.
+     *
+     * @param vertex to be added
+     * @return true if vertex was added
+     */
     @Override
     public boolean addVertex(Object vertex) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Integer pos = position.get((V) vertex);
+        //  if vertex already exists
+        if (null == pos) {
+            return false;
+        }
+        //  create node and add it to graph
+        nodes.add(new Node((V) vertex));
+        //  add node index into position dictionary
+        position.put((V) vertex, nodes.size() - 1);
+
+        return true;
     }
 
     @Override
