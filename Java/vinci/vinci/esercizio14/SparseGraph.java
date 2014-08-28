@@ -375,7 +375,7 @@ public class SparseGraph<V, E> implements Graph<V, E> {
         }
     }
 
-    public Graph<String, String> loadFromFile(String fileName) throws Exception {
+    public static Graph<String, String> loadFromFile(String fileName) throws Exception {
         Graph<String, String> graph = new SparseGraph();
         try {
             Scanner input = new Scanner(new File(fileName));
