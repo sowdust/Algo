@@ -86,8 +86,10 @@ public interface Graph<V, E> {
      * @param v1
      * @param v2
      * @return true if edge found, false otherwise
+     * @throws IllegalArgumentException if vertices not in graph
+     *
      */
-    boolean hasEdge(V v1, V v2);
+    boolean hasEdge(V v1, V v2) throws IllegalArgumentException;
 
     /**
      *
