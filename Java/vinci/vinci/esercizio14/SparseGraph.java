@@ -308,6 +308,21 @@ public class SparseGraph<V, E> implements Graph<V, E> {
         return neighbours;
     }
 
+    public ArrayList<Edge> edges() {
+        HashMap<Edge, Integer> unique = new HashMap<>();
+        ArrayList<Edge> edges = new ArrayList<>();
+
+        for (Node n : nodes) {
+            for (Object e : n.getEdges()) {
+                if (unique.get((Edge) e) == null) {
+                    unique.put((Edge) e, 0);
+                    edges.add((Edge) e);
+                }
+            }
+        }
+        return edges;
+    }
+
     private class Edge<E> {
 
         E info;
@@ -372,6 +387,10 @@ public class SparseGraph<V, E> implements Graph<V, E> {
         @Override
         public String toString() {
             return vertex.toString();
+        }
+
+        List<Edge> getEdges() {
+            return incident;
         }
     }
 
