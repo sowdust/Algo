@@ -97,7 +97,6 @@ public class UnionFind {
         //  COMPREHENSION: update the nodes moving them as children of the root
         //  member of their set
         for (Integer toCompress : daComprimere) {
-            System.out.println("adding " + e + "as father");
             a[toCompress] = e;
         }
         return e;
@@ -122,6 +121,15 @@ public class UnionFind {
         // update ref to root of "united" member
         this.a[eb] = ea;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        String s = new String();
+        for (int i = 0; i < a.length; ++i) {
+            s += " " + a[i];
+        }
+        return s;
     }
 
 }

@@ -1,6 +1,8 @@
 package vinci.esercizio14;
 
 import java.util.ArrayList;
+//  necessario per esercizi successivi
+import vinci.esercizio14.SparseGraph.Edge;
 
 /**
  * General interface for Graph abstract data type
@@ -113,4 +115,8 @@ public interface Graph<V, E> {
      */
     ArrayList<V> neighbours(V vertex);
 
+    /**
+     * @return all edges of the graph
+     */
+    ArrayList<Edge> edges();
 }

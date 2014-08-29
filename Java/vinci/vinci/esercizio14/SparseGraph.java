@@ -26,7 +26,7 @@ public class SparseGraph<V, E> implements Graph<V, E> {
     private final List<Node> nodes;
     private final HashMap<V, Integer> position;
 
-    SparseGraph() {
+    public SparseGraph() {
         this.nodes = new ArrayList<>();
         this.position = new HashMap<>();
     }
@@ -323,7 +323,10 @@ public class SparseGraph<V, E> implements Graph<V, E> {
         return edges;
     }
 
-    private class Edge<E> {
+    //  LE CLASSI QUI SOTTO SONO DEFINITE COME PUBBLICHE
+    //  SUCCESSIVAMENTE ALLO SVILUPPO DEL COMPITO
+    //  PER ESSERE USATE NEGLI ESERCIZI SUCCESSIVI
+    public class Edge<E> {
 
         E info;
         Node node1;
@@ -343,8 +346,16 @@ public class SparseGraph<V, E> implements Graph<V, E> {
             return n == node1 || n == node2;
         }
 
-        Node getSecond() {
+        public Node getFirst() {
+            return node1;
+        }
+
+        public Node getSecond() {
             return node2;
+        }
+
+        public E getInfo() {
+            return info;
         }
 
         @Override
@@ -354,7 +365,7 @@ public class SparseGraph<V, E> implements Graph<V, E> {
 
     }
 
-    private class WEdge<E> extends Edge<E> {
+    public class WEdge<E> extends Edge<E> {
 
         double weight;
 
@@ -363,7 +374,7 @@ public class SparseGraph<V, E> implements Graph<V, E> {
             this.weight = weight;
         }
 
-        double getWeight() {
+        public double getWeight() {
             return weight;
         }
 
@@ -374,7 +385,7 @@ public class SparseGraph<V, E> implements Graph<V, E> {
 
     }
 
-    private class Node<V> {
+    public class Node<V> {
 
         V vertex;
         List<Edge> incident;
@@ -391,6 +402,10 @@ public class SparseGraph<V, E> implements Graph<V, E> {
 
         List<Edge> getEdges() {
             return incident;
+        }
+
+        public V getVertex() {
+            return vertex;
         }
     }
 
@@ -409,8 +424,7 @@ public class SparseGraph<V, E> implements Graph<V, E> {
                         graph.addVertex(nome2);
                         if (lineScan.hasNextInt()) {
                             double peso = lineScan.nextInt();
-//System.out.println(temp1.name+" "+temp2.name);
-                            graph.addEdge(nome1, nome2, peso, nome1 + " " + nome2);
+                            graph.addEdge(nome1, nome2, peso, nome1 + " -> " + nome2 + " {" + peso + " }");
                         } else {
                             throw new Exception("Bad string format");
                         }

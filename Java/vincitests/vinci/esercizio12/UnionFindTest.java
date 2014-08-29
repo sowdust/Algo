@@ -63,4 +63,35 @@ public class UnionFindTest {
 
     }
 
+    @Test
+    public void testPrint() {
+        System.out.println("Print");
+        int e = 0;
+        UnionFind uf = new UnionFind(5);
+        uf.union(1, 2);
+        System.out.println("union 1 2");
+        System.out.println(uf);
+
+        uf.union(1, 2);
+        System.out.println("union 1 2");
+        System.out.println(uf);
+
+        uf.union(3, 4);
+        System.out.println("union 3 4");
+        System.out.println(uf);
+
+        uf.union(1, 0);
+        System.out.println("union 1 0");
+        System.out.println(uf);
+
+        uf.union(1, 3);
+        System.out.println("union 1 3");
+        System.out.println(uf);
+
+        uf.find(4);
+        System.out.println("find 4");
+        System.out.println(uf);
+
+    }
+
 }

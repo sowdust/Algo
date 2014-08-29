@@ -13,11 +13,6 @@ public class SparseGraphTest {
         graph = new SparseGraph();
     }
 
-    @Before
-    public void setUp() {
-
-    }
-
     @Test
     public void testAll() {
 
