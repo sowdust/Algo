@@ -323,6 +323,12 @@ public class SparseGraph<V, E> implements Graph<V, E> {
         return edges;
     }
 
+    @Override
+    public List<Edge> edges(V v) {
+        int pos = position.get(v);
+        return nodes.get(pos).incident;
+    }
+
     //  LE CLASSI QUI SOTTO SONO DEFINITE COME PUBBLICHE
     //  SUCCESSIVAMENTE ALLO SVILUPPO DEL COMPITO
     //  PER ESSERE USATE NEGLI ESERCIZI SUCCESSIVI

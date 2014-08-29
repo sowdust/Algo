@@ -1,7 +1,7 @@
 package vinci.esercizio14;
 
 import java.util.ArrayList;
-//  necessario per esercizi successivi
+import java.util.List;
 import vinci.esercizio14.SparseGraph.Edge;
 
 /**
@@ -118,5 +118,11 @@ public interface Graph<V, E> {
     /**
      * @return all edges of the graph
      */
-    ArrayList<Edge> edges();
+    List<Edge> edges();
+
+    /**
+     * @param v
+     * @return all edges incident to node v
+     */
+    List<Edge> edges(V v);
 }

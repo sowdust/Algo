@@ -2,9 +2,11 @@ package vinci.esercizio15;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 import vinci.esercizio14.Graph;
 import vinci.esercizio14.SparseGraph;
+import vinci.esercizio14.SparseGraph.Edge;
 
 /**
  * Implements Dijkstra algorithm to find minimum path over a positive-weighted
@@ -45,9 +47,10 @@ public class MinPathDijkstra<V, E> {
         //  set up
         ArrayList<V> nodes = g.vertices();
         ArrayList<V> father = new ArrayList(nodes.size());
-        double[] distanza = new double[nodes.size()];
+        HashMap<V, Integer> position = new HashMap<>();
+        double[] distance = new double[nodes.size()];
         //  not strictly necessary now, but will be in Prim
-        boolean[] definitivo = new boolean[nodes.size()];
+        boolean[] definitive = new boolean[nodes.size()];
 
         Comparator<VwPrior> comparator = new Comparator<VwPrior>() {
             @Override
@@ -71,14 +74,41 @@ public class MinPathDijkstra<V, E> {
         //  init
         for (int i = 0; i < nodes.size(); ++i) {
             V n = nodes.get(i);
-            distanza[i] = Double.POSITIVE_INFINITY;
-            definitivo[i] = false;
+            distance[i] = Double.POSITIVE_INFINITY;
+            definitive[i] = false;
             father.add(i, null);
             result.addVertex(nodes.get(i));
+            position.put(n, i);
+        }
+
+        int startPos = position.get(s);
+        father.set(startPos, s);
+        distance[startPos] = 0;
+
+        for (V n : nodes) {
+            int pos = position.get(n);
+            VwPrior c = new VwPrior(n, distance[pos]);
+            queue.offer(c);
+        }
+
+        while (!queue.isEmpty()) {
+            VwPrior c = queue.poll();
+            V v = (V) c.vertex;
+            int pos = position.get(c);
+            definitive[pos] = true;
+
+            for (Edge adj : g.edges(v)) {
+
+                /**
+                 * if (not definitivo[v] && dist[u] + c uv < dist[v] ) {
+                 * padre[v] = u; dist[v] = dist[u] + c uv ; decreasePriority(v,
+                 * dist[v], Q); cioè fa una moveUp
+                 */
+            }
 
         }
 
-        return null;
+        return result;
 
     }
 
