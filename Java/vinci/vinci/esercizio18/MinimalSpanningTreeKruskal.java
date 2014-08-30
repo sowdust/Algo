@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import vinci.esercizio12.UnionFind;
 import vinci.esercizio14.Graph;
 import vinci.esercizio14.SparseGraph;
@@ -32,7 +33,7 @@ public class MinimalSpanningTreeKruskal<V extends Comparable<V>, E> {
         ArrayList<E> mar = new ArrayList<>();
 
         //  get all edges and vertices of graph
-        ArrayList<Edge> edges = graph.edges();
+        List<Edge> edges = graph.edges();
         ArrayList<V> nodes = graph.vertices();
 
         //  create union find struct as big as the # of vertices
@@ -62,8 +63,9 @@ public class MinimalSpanningTreeKruskal<V extends Comparable<V>, E> {
         };
         Collections.sort(edges, comparator);
 
+        int counter = 0;
         //  PRECOND: edges is ordered by weight
-        for (int i = 0; i < edges.size(); ++i) {
+        for (int i = 0; counter < nodes.size() - 1; ++i) {
 
             //  get integer map of vertices of current edge
             Edge current = edges.get(i);
@@ -71,9 +73,10 @@ public class MinimalSpanningTreeKruskal<V extends Comparable<V>, E> {
             int v2 = position.get((V) current.getSecond().getVertex());
 
             //  if the two edges are still separate by a cut in the graph
-            if (set.find(v1) != set.find(v2)) {
+            //      this union returns false if find(v1)==find(v2)
+            if (set.union(v1, v2)) {
                 mar.add((E) current.getInfo());
-                set.union(v1, v2);
+                ++counter;
             }
         }
         return mar;
