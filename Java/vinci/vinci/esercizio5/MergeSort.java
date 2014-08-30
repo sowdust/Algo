@@ -32,7 +32,7 @@ public class MergeSort implements SortingAlgorithm {
             int m = (first + last) / 2;
             msort(a, first, m, aux);
             msort(a, m + 1, last, aux);
-            mergeInPlace(a, first, m, last, aux);
+            mergeEcologico(a, first, m, last, aux);
         }
     }
 
@@ -121,7 +121,7 @@ public class MergeSort implements SortingAlgorithm {
      * @param last
      * @param aux
      */
-    void mergeInPlace(int[] a, int first, int m, int last, int[] aux) {
+    void mergeEcologico(int[] a, int first, int m, int last, int[] aux) {
         int i = first, j = m + 1, k = first;
         // se già ordinati, ritorna
         if (a[m] <= a[m + 1]) {
