@@ -1,12 +1,9 @@
-#include<stdio.h>
-#include<stdlib.h>
+#ifndef _HEADER_
+#define _HEADER_
+#include "header.h"
+#endif
 
-void heapsort(int *, int);
-void heapify(int*, int, int);
-void move_down(int*, int, int);
-void scambia(int*, int*);
-
-void scambia(int *x, int *y)
+void swap(int *x, int *y)
 {
     if (x != y)
     {
@@ -28,7 +25,7 @@ void heapify(int* a, int i, int last)
 
 }
 
-void stampa(int* a, int size)
+void print_array(int* a, int size)
 {
     int i;
     for(i = 0; i < size; ++i)
@@ -47,7 +44,7 @@ void heapsort(int* a, int n)
     }
     for(i = n-1; i > 0; --i)
     {
-        scambia((a+i),a);
+        swap((a+i),a);
         move_down(a,0,i);
     }
 }
@@ -69,25 +66,4 @@ void move_down(int* a, int i, int n)
         i = j;
     }
     *(a+i) = e;
-}
-
-
-void main() {
-    int* a = (int*)malloc(sizeof(int) * 5);
-    a[0] = 51;
-    a[1] = 2;
-    a[2] = 3;
-    a[3] = 10;
-    a[4] = 2;
-    a[5] = 5;
-    a[6] = 90;
-    a[7] = 4;
-    a[8] = 9;
-    a[9] = -5;
-
-
-    stampa(a, 10);
-    heapsort(a,10);
-    stampa(a,10);
-  
 }

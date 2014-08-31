@@ -5,8 +5,8 @@
 
 #define FILE_NAME "risultato_analisi.csv"
 #define INIZIALE 1
-#define QUANTI_TEST 200
-#define MOLTIPLICATORE 100
+#define QUANTI_TEST 100
+#define MOLTIPLICATORE 1000
 
 int* create_array(int size)
 {
@@ -14,7 +14,7 @@ int* create_array(int size)
 	int i = 0;
 	for(; i < size; ++i)
 	{
-		*(a+i) = i; //rand();
+		*(a+i) = rand();
 	}
 	return a;
 }
@@ -38,9 +38,9 @@ copy_array(int* from, int* to, int size)
 	}
 }
 
-int write_row(int size, double isort, double ssort, double msort, double quicksort, FILE* file)
+int write_row(int size, double isort, double ssort, double msort, double quicksort, double heapsort, FILE* file)
 {
-	fprintf(file, "%d, %.2f, %.2f, %.2f, %.2f \n", size, isort, ssort, msort, quicksort);
+	fprintf(file, "%d, %.2f, %.2f, %.2f, %.2f, %.2f \n", size, isort, ssort, msort, quicksort, heapsort);
 	return fflush(file);
 	
 }
@@ -52,7 +52,7 @@ void main(int argc, char* argv[])
 	int* b;
 	int i = 1;
 	int size = INIZIALE;
-	double ti, ts, tm, tq;
+	double ti, ts, tm, tq, th;
 	struct timeval t1, t2;
 	double elapsedTime;
 	
@@ -102,6 +102,8 @@ void main(int argc, char* argv[])
 		}
 		printf("SSORT [%d] %f  \n", i, ts);
 */
+        ts = 0;
+        ti = 0;
 
 		// MSORT
 		copy_array(b,a,size);
@@ -133,12 +135,29 @@ void main(int argc, char* argv[])
 			printf("Errore! Non Ordinato!\n");
 			return;
 		}
-		printf("QSORT [%d] %f  \n\n", i, tq);
+		printf("QSORT [%d] %f  \n", i, tq);
+		
+		
+		// HSORT
+		copy_array(b,a,size);
+		gettimeofday(&t1, NULL);
+		heapsort(a,size);
+		gettimeofday(&t2, NULL);
+		// da secondi a ms
+		th = (t2.tv_sec - t1.tv_sec) * 1000.0;
+		// da usecondi a ms
+		th += (t2.tv_usec - t1.tv_usec) / 1000.0;
+		if(ordinato(a,size) < 0)
+		{
+			printf("Errore! Non Ordinato!\n");
+			return;
+		}
+		printf("HSORT [%d] %f  \n\n", i, th);
 
 		free(a);
 		free(b);
 		
-		if( write_row(size, ti, ts, tm, tq, ouput_file) < 0 )
+		if( write_row(size, ti, ts, tm, tq, th, ouput_file) < 0 )
 		{
 			fprintf(stderr, "Errore durante la scrittura del file");
 		}
