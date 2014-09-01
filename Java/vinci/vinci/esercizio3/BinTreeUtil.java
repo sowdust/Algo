@@ -96,7 +96,7 @@ public class BinTreeUtil {
     }
 
     /**
-     * Stampa t sulla consolle. L'ordine dei valori deve corrispondere ai valori
+     * Stampa t sulla console. L'ordine dei valori deve corrispondere ai valori
      * che vengono incontrati durante una visita simmetrica (inorder).
      *
      * @param t Albero da stampare
@@ -111,7 +111,7 @@ public class BinTreeUtil {
     }
 
     /**
-     * Stampa i valori nei nodi in t sulla consolle. L'ordine dei valori deve
+     * Stampa i valori nei nodi in t sulla console. L'ordine dei valori deve
      * corrispondere ai valori che vengono incontrati durante una visita
      * posticipata (postorder).
      *
@@ -305,6 +305,44 @@ public class BinTreeUtil {
         }
         return (l | r);
 
+    }
+
+    /**
+     * Metodo per controllare se l'albero è pieno. Si chiede se il numero di
+     * nodi di ogni sottoalbero sia uguale a 2^(altezza del sottoalbero).
+     *
+     * @return true se l'albero this è completo; altrimenti false.
+     */
+    public boolean isComplete(BinTree t) {
+        return isComplete(t, this.height(t));
+    }
+
+    private boolean isComplete(BinTree nd, int h) {
+        return this.numNodi(nd) == (power2(h) - 1);
+    }
+
+    /**
+     * Metodo di utilità per calcolare piccole potenze di 2.
+     *
+     * @param exp l'esponente della potenza di 2 da calcolare
+     * @return 2^exp.
+     */
+    public int power2(int exp) {
+        int result = 2;
+        for (int i = 0; i < exp; i++) {
+            result *= 2;
+        }
+        return result;
+    }
+
+    /**
+     * Metodo per calcolare il numero di nodi di un albero o sottoalbero.
+     *
+     * @param nd il nodo-radice da cui contare il numero di nodi
+     * @return il numero di nodi del sottoalbero.
+     */
+    public int numNodi(BinTree nd) {
+        return nd == null ? 0 : numNodi(nd.left) + numNodi(nd.right) + 1;
     }
 
     /**
@@ -509,95 +547,5 @@ public class BinTreeUtil {
         if (t.right != null) {
             central_nodes(t.right, h + 1);
         }
-    }
-    /*
-     classe ausiliaria per l'esercizio successivo
-     */
-
-    private static class BoolIntPair {
-
-        boolean isCB;
-        int height;
-
-        BoolIntPair(boolean isCB, int height) {
-            this.isCB = isCB;
-            height = this.height;
-        }
-    }
-
-    /**
-     * restituisce true se l'albero t è "completamente bilanciato" secondo la
-     * definizione del libro di testo, altrimenti false: realizzazione come sul
-     * libro di testo (vedi pag. 92-93)
-     */
-    public boolean isCompletelyBalancedFromTextbook(BinTree t) {
-        return isCBHeight(t).isCB;
-    }
-
-    private BoolIntPair isCBHeight(BinTree t) {
-        // funzione ausiliaria
-        return null;
-    }
-
-    /*
-     * restituisce true se l'albero t è "completamente bilanciato"
-     * secondo la definizione del libro di testo,
-     * altrimenti false: realizzazione "snella"
-     */
-    public boolean isCompletelyBalanced(BinTree t) {
-        return true;
-    }
-
-    private int heightCB(BinTree t) {
-        // funzione ausiliaria
-        return 1000;
-    }
-
-    /*
-     classe ausiliaria per l'esercizio successivo
-     */
-    protected static class IntPair {
-
-        int height;
-        int maxUnbal;
-
-        IntPair(int h, int u) {
-            height = h;
-            maxUnbal = u;
-        }
-    }
-
-    /*
-     * nello stile del libro di testo:
-     * restituisce il massimo sbilanciamento
-     * dei nodi di un albero
-     */
-    public static int maxUnbalance(BinTree t) {
-        return heightUnbalance(t).height;
-    }
-
-    /*
-     * nello stile del libro di testo:
-     * restituisce una coppia di interi di cui il primo
-     * è l'altezza di t, il secondo è il massimo sbilanciamento
-     * dei sottoalberi di t, dove si definisce:
-     * sbilanciamento di un albero = valore assoluto della differenza fra
-     * l'altezza del sottoalbero sinistro e l'altezza del sottoalbero destro
-     */
-    private static IntPair heightUnbalance(BinTree t) {
-        if (t == null) {
-            return new IntPair(-1, 0);
-        } else {
-            // SOSTITUIRE COMPLETANDO
-            return null;
-        }
-    }
-
-    /*
-     * restituisce true se l'albero t è "1-bilanciato",
-     * altrimenti false
-     */
-    public static boolean is1Balanced(BinTree t) {
-        return true;
     }
 }
