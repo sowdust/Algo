@@ -1,5 +1,8 @@
 package vinci.esercizio13;
 
+/**
+ * Implementation of ObjectWithIntKey interface in which Objects are Strings
+ */
 class Element implements ObjectWithIntKey {
 
     String val;

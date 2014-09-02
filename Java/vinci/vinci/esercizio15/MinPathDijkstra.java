@@ -11,7 +11,7 @@ import vinci.esercizio14.SparseGraph;
  * Implements Dijkstra algorithm to find minimum path over a positive-weighted
  * graph.
  *
- * I wanted to try using Java PriorityQueue API
+ * I wanted to try using Java PriorityQueue API but it sucks.
  *
  * @param <V> type of vertices
  * @param <E> type of edges

@@ -308,6 +308,11 @@ public class SparseGraph<V, E> implements Graph<V, E> {
         return neighbours;
     }
 
+    /**
+     *
+     * @return list of all edges in the graph
+     */
+    @Override
     public ArrayList<Edge> edges() {
         HashMap<Edge, Integer> unique = new HashMap<>();
         ArrayList<Edge> edges = new ArrayList<>();

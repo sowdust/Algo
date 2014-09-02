@@ -1,5 +1,11 @@
 package vinci.esercizio13;
 
+/**
+ * Abstract Data Type Definition.
+ *
+ * Dictionary of Objecst having Integer keys.
+ *
+ */
 public interface DictionaryIntKeys {
 
     /**

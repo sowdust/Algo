@@ -20,7 +20,7 @@ public class MergeSort implements SortingAlgorithm {
     }
 
     /**
-     * Mergesort versione classica che fa uso di array ausiliare
+     * Mergesort versione classica che fa uso di array ausiliario
      *
      * @param a
      * @param first

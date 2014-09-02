@@ -1,5 +1,8 @@
 package vinci.esercizio13;
 
+/**
+ * Implements a DictionaryWithIntKeys using ObjectsWithIntKeys
+ */
 public class SearchTreeWithIntKeys implements DictionaryIntKeys {
 
     Node root;
@@ -9,7 +12,6 @@ public class SearchTreeWithIntKeys implements DictionaryIntKeys {
     }
 
     /**
-     *
      * Calls the static method passing root as node parameter (if not null)
      * because Java cannot pass references
      *

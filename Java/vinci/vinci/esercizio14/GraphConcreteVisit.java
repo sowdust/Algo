@@ -14,6 +14,16 @@ public class GraphConcreteVisit<V, E> implements GraphVisit<V, E> {
     Graph<V, E> result;
     Queue<V> frontier;
 
+    /**
+     * Implements a COMPLETE breadth first visit on a given graph performing the
+     * analyze() method of a given vertex analyzer on each node when it is first
+     * encountered (becomes "gray")
+     *
+     * @param graph graph to visit
+     * @param s startin node
+     * @param va class containing analyze method
+     * @return tree visit
+     */
     @Override
     public Graph<V, E> breadthFirst(Graph<V, E> graph, V s, VertexAnalyzer<V> va) {
         frontier = new LinkedList<>();
@@ -54,6 +64,16 @@ public class GraphConcreteVisit<V, E> implements GraphVisit<V, E> {
 
     }
 
+    /**
+     * Implements a COMPLETE depth first (recursive) visit on a given graph
+     * performing the analyze() method of a given vertex analyzer on each node
+     * when it is first encountered (becomes "gray")
+     *
+     * @param graph graph to visit
+     * @param s startin node
+     * @param va class containing analyze method
+     * @return tree visit
+     */
     @Override
     public Graph<V, E> depthFirst(Graph<V, E> graph, V s, VertexAnalyzer<V> va) {
         //  set up basic data structures
