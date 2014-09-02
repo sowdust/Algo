@@ -12,6 +12,9 @@ import java.util.List;
  * node is not root; 2) the opposite of the size of the tree if the node is
  * root. => if value is negative, it is a root; otherwise a "child"
  *
+ * FEATURES: union by SIZE and path comprehension. Union by size is "stable": if
+ * two sizes equal, the second is attached to the first
+ *
  */
 public class UnionFind {
 
@@ -105,6 +108,10 @@ public class UnionFind {
     /**
      * Unites set containing a and b.
      *
+     *
+     * Union by SIZE, "stable": if two sizes equal, the second is attached to
+     * the first. Otherwise smaller becomes child of bigger.
+     *
      * @param a
      * @param b
      * @return true if a and b belonging to different sets. false otherwise.
@@ -116,10 +123,16 @@ public class UnionFind {
         if (ea == eb) {
             return false;
         }
-        // update size of union
-        this.a[ea] += this.a[eb];
-        // update ref to root of "united" member
-        this.a[eb] = ea;
+        //  union by size (smaller becomes child of bigger)
+        if (this.a[ea] <= this.a[eb]) {
+            // update size of union
+            this.a[ea] += this.a[eb];
+            // update ref to root of "united" member
+            this.a[eb] = ea;
+        } else {
+            this.a[eb] += this.a[ea];
+            this.a[ea] = eb;
+        }
         return true;
     }
 
